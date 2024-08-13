@@ -24,7 +24,7 @@ void setup() {
   //Wire.setClock(400000); // cài đặt tốc độ giao tiếp i2c ở tốc độ cao nhất(400 Mhz). Hàm này có thể bỏ qua nếu gặp lỗi hoặc không có nhu cầu tử dụng I2c tốc độ cao
   int degree = 90;
   pwm.setPWM(6, 0, map(degree,0,360,0,614));
-  pwm.setPWM(7, 0, 375);//setup chân ban đầu 2 servo outtake
+  pwm.setPWM(7, 0, 307);//setup chân ban đầu 2 servo outtake
   initMotors();
   setupPS2controller();//dùng trong thư viện điều khiển
   pwm.setPWM(5, 0, 307);
