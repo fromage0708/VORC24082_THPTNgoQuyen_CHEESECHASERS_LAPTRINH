@@ -12,7 +12,7 @@ Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_154MS, TCS347
 int speed=4096;//tốc độ tối đa của motor máy bắn
 bool r1 = false;//biến của nút tròn
 bool green = false;//biến của nút tam giác
-bool pink = false;//biến của nút vuông
+bool pink = false;//biến của nút vuông nút n lmj ??
 
 
 
