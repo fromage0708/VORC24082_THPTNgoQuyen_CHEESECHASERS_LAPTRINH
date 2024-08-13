@@ -1,7 +1,7 @@
 
 # 🧀 VORC24082_CHEESECHASERS 🧀
 
-"🔥Ăn cũng làm, ngủ cũng làm, cần cù thì bù phô mai.🔥" - Cheese Chaser
+"🔥Ăn cũng làm, ngủ cũng làm, cần cù thì bù phô mai.🔥" - Cheese Chasers
 
 📙Dự án này sử dụng tay cầm điều khiển PS2 để điều khiển robot của đội trong cuộc thi VORC2024, được code trên những thư viện có sẵn, tải những thư viện trong thư mục [lib](https://github.com/fromage0807/lmaolmao/tree/main/lib) để sử dụng.🎮🎮
 
