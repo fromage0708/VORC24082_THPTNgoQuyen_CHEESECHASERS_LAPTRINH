@@ -143,7 +143,7 @@ void Cam_Bien_Hong_Ngoai()
 
   else
   {
-    pwm.setPWM(4, 307, 0);
+    pwm.setPWM(4, 0,205);
       //nếu đó là bóng trắng thì servo sẽ được mở ra
   }
 }
