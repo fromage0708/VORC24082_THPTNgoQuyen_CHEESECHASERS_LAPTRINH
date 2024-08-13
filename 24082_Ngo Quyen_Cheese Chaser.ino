@@ -27,8 +27,8 @@ void setup() {
   pwm.setPWM(7, 0, 375);//setup chân ban đầu 2 servo outtake
   initMotors();
   setupPS2controller();//dùng trong thư viện điều khiển
-  pwm.setPWM(5, 0, 375);
-  pwm.setPWM(4, 0, 375);//set chân và đặt góc ban đầu cho servo tự động
+  pwm.setPWM(5, 0, 307);
+  pwm.setPWM(4, 0, 307);//set chân và đặt góc ban đầu cho servo tự động
   pinMode(SENSOR_PIN,INPUT);
 }
 
