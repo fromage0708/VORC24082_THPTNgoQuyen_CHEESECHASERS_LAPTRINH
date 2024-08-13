@@ -66,15 +66,15 @@ void Outake_Bong_Trang()
   while(r1==true)
   {
     int dem=millis();
-    pwm.setPWM(6, 0, 150);
+    pwm.setPWM(6, 0, 205);
     if(dem==1000)
     {
-      pwm.setPWM(6, 0, 188);
+      pwm.setPWM(6, 0, 256);
     }
 
     if(dem==2000)
     {
-      pwm.setPWM(6, 0, 150);
+      pwm.setPWM(6, 0, 205);
       dem=0;
     }//servo sẽ tự động đóng mở khi outtake bắt đc bật mỗi 3s
 
@@ -86,12 +86,12 @@ void Outake_Bong_Den()
 {
   if(green==true)
   {
-    pwm.setPWM(7, 0, 150);
+    pwm.setPWM(7, 0, 205);
   }
   
   else
   {
-    pwm.setPWM(7, 0, 375);  
+    pwm.setPWM(7, 0, 307);  
   }//-khi nhấn cổng outtake sẽ được mở ra và nhấn lại lần nữa thì cổng sẽ đóng lại
 }
 
