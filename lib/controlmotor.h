@@ -3,8 +3,8 @@
 #include <Adafruit_PWMServoDriver.h> // thư viện PCA9685
 #include <PS2X_lib.h> // thư viện điều khiển 
 
-//input
-//#defind
+
+#define ServoDriver_ADDRESS 0x70
 //Định nghĩa các chân điều khiển (i2c) 
 #define PS2_DAT 12 // MISO 
 #define PS2_CMD 13 // MOSI 
@@ -23,7 +23,7 @@ bool status_intake = false;
 #define Mright_2  15
 
 //khac
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(); //Khởi tạo class của thư viện
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(ServoDriver_ADDRESS); //Khởi tạo class của thư viện
 PS2X ps2x; // khởi tạo class PS2x
 
 #define Y_JOY_CALIB 128
@@ -51,7 +51,7 @@ void initMotors() // khai bao dong co
   Wire.begin(); // SDA, SCL,400000);
   pwm.begin();
   pwm.setOscillatorFrequency(27000000); // lien quan toi led va servo
-  pwm.setPWMFreq(60);  //  max 1k6 || kiem soat tan suat dau ra
+  pwm.setPWMFreq(50);  //  max 1k6 || kiem soat tan suat dau ra
   Wire.setClock(400000); // high speed mode 400khz
 
   setPWMMotors(0, 0, 0, 0);
@@ -117,4 +117,3 @@ bool PS2control()
 
 }
 // set up dieu khien - END
-
