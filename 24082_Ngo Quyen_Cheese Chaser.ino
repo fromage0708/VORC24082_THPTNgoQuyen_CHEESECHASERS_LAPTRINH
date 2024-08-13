@@ -126,7 +126,7 @@ void Color_Sensor()
   
   else if ((c>2000)&&(r<1000)) 
   {
-      pwm.setPWM(5, 307, 0);
+      pwm.setPWM(5, 0, 205);
     }
     //nếu đó là bóng trắng thì servo sẽ được mở ra
 }
