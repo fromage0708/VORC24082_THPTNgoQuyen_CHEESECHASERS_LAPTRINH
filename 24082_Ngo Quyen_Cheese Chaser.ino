@@ -116,74 +116,34 @@ void Intake()
 void Color_Sensor() 
 {
   uint16_t r,g,b,c;
-  //những màu color sensor xác định bao gồm red, green, blue và clean
+  //những giá trị  màu color sensor xác định bao gồm red, green, blue và clean
   tcs.getRawData(&r,&g,&b,&c);
-  int dem2=millis();
-  if ((c>2500)&&(r+g+b>1500)) 
+  if ((c>2000)&&(r>1000)) 
   {
-    pwm.setPWM(5, 0, 375);
-    if(dem2==3000){
-    pwm.setPWM(5, 0, 600);
-    }
-    if(dem2==6000){
-      pwm.setPWM(5, 0, 375);
-      dem2=0;
-    }
+    pwm.setPWM(5, 0, 307);
     //nếu đó là bóng đen thì servo sẽ đóng lại
   }
   
-  else if ((c>2500)&&(r+g+b<1500)) 
+  else if ((c>2000)&&(r<1000)) 
   {
-    pwm.setPWM(5, 0, 375);
-    if(dem2==3000)
-    {
-      pwm.setPWM(5, 0, 600);
+      pwm.setPWM(5, 307, 0);
     }
-    
-    else if(dem2==6000)
-    {
-      pwm.setPWM(5, 0, 375);
-      dem2=0;
-    }  
-  }
     //nếu đó là bóng trắng thì servo sẽ được mở ra
 }
 
 
 void Cam_Bien_Hong_Ngoai() 
 {
-  int dem3=millis();
   int present = digitalRead(SENSOR_PIN);
   if (present == LOW) 
   {
-    pwm.setPWM(4, 0, 600);
-    if(dem3==3000)
-    {
-      pwm.setPWM(4, 0, 375);
-    }
-
-    if(dem3==3000)
-    {
-      pwm.setPWM(4, 0, 600);
-      dem3=0;
-    }
+    pwm.setPWM(4, 0, 307);
     //nếu đó là bóng đen thì servo sẽ đóng lại 
-
   }
 
   else
   {
-    pwm.setPWM(4, 0, 600);
-    if(dem3==3000)
-      {
-        pwm.setPWM(4, 0, 375);
-      }
-
-    if(dem3==3000)
-      {
-        pwm.setPWM(4, 0, 600);
-        dem3=0;
-      }
+    pwm.setPWM(4, 307, 0);
       //nếu đó là bóng trắng thì servo sẽ được mở ra
   }
 }
