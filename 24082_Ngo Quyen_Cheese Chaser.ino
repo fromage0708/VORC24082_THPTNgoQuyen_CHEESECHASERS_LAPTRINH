@@ -49,7 +49,7 @@ void loop()
   Outake_Bong_Den();//Khởi động hàm outake cho bóng đen
 }
 
-const Outake_Bong_Trang() 
+void Outake_Bong_Trang() 
 {
   if (r1==true) 
   {
@@ -82,7 +82,7 @@ const Outake_Bong_Trang()
 }//-nhấn lần đầu intake sẽ quay và nhấn lầ 2 intake sẽ đóng lại
   
 
-const Outake_Bong_Den() 
+void Outake_Bong_Den() 
 {
   if(green==true)
   {
@@ -96,7 +96,7 @@ const Outake_Bong_Den()
 }
 
 
-const Intake() 
+void Intake() 
 {
   if(pink==true)
   {
@@ -113,7 +113,7 @@ const Intake()
 }
   
 
-const Color_Sensor() 
+void Color_Sensor() 
 {
   uint16_t r,g,b,c;
   //những màu color sensor xác định bao gồm red, green, blue và clean
@@ -150,7 +150,7 @@ const Color_Sensor()
 }
 
 
-const Cam_Bien_Hong_Ngoai() 
+void Cam_Bien_Hong_Ngoai() 
 {
   int dem3=millis();
   int present = digitalRead(SENSOR_PIN);
