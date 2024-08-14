@@ -7,40 +7,38 @@
 
 
 
-const int SENSOR_PIN = 25;//khai báo chân cắm cảm biến hồng ngoại 
+const int SENSOR_PIN = 27;//khai báo chân cắm cảm biến hồng ngoại 
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_154MS, TCS34725_GAIN_4X);//cài đặt thông số cho color sensor TCS34725 về INTEGRATIONTIME (Thời gian tích hợp) và gain (giá trị nhận được)
 int speed = 4096;//tốc độ tối đa của motor máy bắn
 bool r1 = false;//biến của nút tròn
 bool green = false;//biến của nút tam giác
 bool pink = false;//biến của nút vuông nút
-
+int degree = 90;
 
 
 void setup() {
-  pwm.begin(); //khởi tạo PCA9685 
-  tcs.begin(); //khởi tạo PCA9685 
-  //pwm.setOscillatorFrequency(27000000); // cài đặt tần số dao động 
-  //pwm.setPWMFreq(50);// cài đặt tần số PWM. Tần số PWM có thể được cài đặt trong khoảng 24-1600 HZ, tần số này được cài đặt tùy thuộc vào nhu cầu xử dụng. Để điều khiển được cả servo và động cơ DC cùng nhau, tần số PWM điều khiển được cài đặt trong khoảng 50-60Hz.
-  //Wire.setClock(400000); // cài đặt tốc độ giao tiếp i2c ở tốc độ cao nhất(400 Mhz). Hàm này có thể bỏ qua nếu gặp lỗi hoặc không có nhu cầu tử dụng I2c tốc độ cao
-  int degree = 90;
-  pwm.setPWM(6, 0, map(degree,0,360,0,614));
-  pwm.setPWM(7, 0, 307);//setup chân ban đầu 2 servo outtake
+  pwm.begin(); //tìm địa chỉ của PCA9685 trong mạch công suất
+  tcs.begin(); //tìm địa chỉ cảm biến màu sắc
+  pwm.setOscillatorFrequency(27000000); // cài đặt tần số dao động 
+  pwm.setPWMFreq(50);// cài đặt tần số PWM. Để điều khiển được cả servo và động cơ DC cùng nhau, tần số PWM điều khiển được cài đặt trong khoảng 50-60Hz.
+  Wire.setClock(400000); // cài đặt tốc độ giao tiếp i2c ở tốc độ cao nhất(400 Mhz). Hàm này có thể bỏ qua nếu gặp lỗi hoặc không có nhu cầu tử dụng I2c tốc độ cao
+  pwm.setPWM(6, 0, map(degree,0,360,0,614)); //setup chân và góc ban đầu cho servo outtake phân tử nước
+  pwm.setPWM(7, 0, 307);//setup chân và góc ban đầu cho servo outtake phân tử rác
+  pwm.setPWM(5, 0, 307);//set chân và đặt góc ban đầu cho 2 servo tự động của phân loại
+  pwm.setPWM(4, 0, 307);//set chân và đặt góc ban đầu cho 2 servo tự động của phân loại
   initMotors();
-  setupPS2controller();//dùng trong thư viện điều khiển
-  pwm.setPWM(5, 0, 307);
-  pwm.setPWM(4, 0, 307);//set chân và đặt góc ban đầu cho servo tự động
+  setupPS2controller();//set up kết nối lặp vô hạn tới khi kết nối, thư viện controlmotor.h
   pinMode(SENSOR_PIN, INPUT);
 }
 
 
 void loop()
 {
-  //di chuyển
-  ps2x.read_gamepad(0, 0);
+  ps2x.read_gamepad(0, 0); //class ps2x được khai báo trong thư viện controlmotor.h
   PS2control();//toàn bộ code di chuyển được đặt trong thư viện controlmotor.h
-  if (ps2x.ButtonPressed(PSB_R1)) {r1 =! r1;}// chuyển ngược biến lại khi nhấn nút
-  if (ps2x.ButtonPressed(PSB_GREEN )) {green =! green;}// chuyển ngược biến lại khi nhấn nút)
-  if (ps2x.ButtonPressed(PSB_PINK)) {pink =! pink;}// chuyển ngược biến lại khi nhấn nút
+  if (ps2x.ButtonPressed(PSB_R1)) {r1 =! r1;}// đảo giá trị của biến mỗi khi nhấn nút
+  if (ps2x.ButtonPressed(PSB_GREEN )) {green =! green;}// đảo giá trị của biến mỗi khi nhấn nút
+  if (ps2x.ButtonPressed(PSB_PINK)) {pink =! pink;}// đảo giá trị của biến mỗi khi nhấn nút
 
   Intake();//Khởi động hàm Intake
   Color_Sensor();//Khởi động hàm Color sensor
@@ -49,52 +47,56 @@ void loop()
   Outake_Bong_Den();//Khởi động hàm outake cho bóng đen
 }
 
+//------------------------------------------------------------------------------------------------
+
 void Outake_Bong_Trang() 
 {
   if (r1==true) 
   {
     pwm.setPWM(8, 0, speed);//chân số 8 set chiều dương tối đa
     pwm.setPWM(9, 0, 0); // chân số 9 set chiều âm
+    // motor outtake quay ở tốc độ max
   }
   else 
   {
     pwm.setPWM(8, 0, 0);
     pwm.setPWM(9, 0, 0); 
     // ngưng không hoạt đông
-  }//-Nếu nhấn nút circle1 lần thì mortor sẽ quay và nếu nhấn lại lần nữa thì motor sẽ hủy
-  
+  }//-Nếu nhấn nút circle 1 lần thì mortor sẽ quay và nếu nhấn lại lần nữa thì motor sẽ dừng
+  unsigned long dem =0;
   while(r1==true)
   {
-    int dem = millis();
     pwm.setPWM(6, 0, 205);
-    if(dem==1000)
+    if ( (unsigned long) (millis() - dem) > 2000 ) //servo mở thanh chặn sau 2s
     {
       pwm.setPWM(6, 0, 256);
     }
 
-    if(dem == 2000)
+    if ( (unsigned long) (millis() - dem) > 4000 ) //servo đóng thanh chặn sau 4s
     {
-      pwm.setPWM(6, 0, 205);
-      dem=0;
-    }//servo sẽ tự động đóng mở khi outtake bắt đc bật mỗi 3s
+      pwm.setPWM(6, 0, 205); 
+      dem=millis(); //set thời gian về 0s
+    }//servo sẽ tự động đóng mở mỗi 2s từ khi ấn nút  
 
-  }//-trong khi motor đang quay thì sẽ có 1 servo hỗ trợ chặn bóng lại để motor bắn từng quả 1
-}//-nhấn lần đầu intake sẽ quay và nhấn lầ 2 intake sẽ đóng lại
-  
+  }//-trong khi motor đang quay thì sẽ có 1 servo hỗ trợ chặn bóng lại để bắn từng quả 1
+}//-nhấn lần đầu intake sẽ quay và nhấn lần 2 intake sẽ dừng lại
+
+//--------------------------------------------------------------------------------------------------
 
 void Outake_Bong_Den() 
 {
   if(green==true)
   {
-    pwm.setPWM(7, 0, 205);
+    pwm.setPWM(7, 0, 205); // servo quay 90 độ để mở cửa chặn phân tử rác
   }
   
   else
   {
-    pwm.setPWM(7, 0, 307);  
-  }//-khi nhấn cổng outtake sẽ được mở ra và nhấn lại lần nữa thì cổng sẽ đóng lại
+    pwm.setPWM(7, 0, 307);  // servo về vị trí ban đầu để đóng cửa chặn
+  }//-khi nhấn, cửa outtake phân tử rác sẽ được mở ra và nhấn lại lần nữa thì cổng sẽ đóng lại
 }
 
+//-------------------------------------------------------------------------------------------------
 
 void Intake() 
 {
@@ -102,64 +104,67 @@ void Intake()
   {
     pwm.setPWM(14, 0, speed);//chân số 14 set chiều dương tối đa
     pwm.setPWM(15, 0, 0);// chân số 15 set chiều âm
+    //motor intake quay ở tốc độ max
   }
   
   else
   {
     pwm.setPWM(14, 0, 0);
     pwm.setPWM(15, 0, 0);
-    //ngưng hoạt động
+    //motor intake dừng
   }
 }
-  
 
-void Color_Sensor() 
+//----------------------------------------------------------------------------------------------------
+
+void Color_Sensor() // tự động phân loại
 {
-  unsigned long bait = 0;
-  unsigned long start = millis();
+  unsigned long time1 = 0;
   uint16_t r,g,b,c;
   //những giá trị  màu color sensor xác định bao gồm red, green, blue và clean
   tcs.getRawData(&r, &g, &b, &c);
-  if ((c > 2000) && (r > 1000)) 
+  if ((c > 2000) && (r > 1000)) // nếu cảm biến màu thấy màu đen
   {
-    if(start-bait >= 300){
-      bait=start;
-      pwm.setPWM(5, 0, 410);
+    if ( (unsigned long) (millis() - time1) > 300 ) // xoay servo trong 300ms
+      time1=millis();
+      pwm.setPWM(5, 0, 410); //servo quay lên 90 độ
     }
-    //nếu đó là bóng đen thì servo sẽ quay lên 90 độ
+    //nếu đó là bóng đen và không có bóng thì servo sẽ quay lên 90 độ
   }
   
-  else if ((c > 2000) && (r < 1000)) 
+  else if ((c > 2000) && (r < 1000)) // cảm biến màu sắc thấy màu trắng
   {
-      if(start-bait >= 300){
-      bait = start;
-      pwm.setPWM(5, 0, 205);
+    if ( (unsigned long) (millis() - time1) > 300 )// xoay servo trong 300ms
+      time1=millis();
+      pwm.setPWM(5, 0, 205);// servo quay xuống 90 độ
     }
   }
-    //nếu đó là bóng trắng thì servo ngược lại 90 độ
+    //nếu đó là bóng trắng thì servo quay xuống 90 độ
 }
 
+//---------------------------------------------------------------------------------------
 
-void Cam_Bien_Hong_Ngoai() 
+void Cam_Bien_Hong_Ngoai() // tự động phân loại
 {
-  unsigned long bait = 0;
-  unsigned long start = millis();
+  unsigned long time = 0;
   int present = digitalRead(SENSOR_PIN);
   if (present == LOW) 
   {
-    if(start-bait >= 300){
-      bait=start;
-      pwm.setPWM(5, 0, 205);
+    if ( (unsigned long) (millis() - time) > 300 )// xoay servo trong 300ms
+    {
+      time = millis();
+      pwm.setPWM(5, 0, 205); //servo quay lên 90 độ
     }
-    //nếu đó là bóng đen thì servo sẽ quay lên 90 độ
+    //nếu đó là bóng đen và không có bóng thì servo sẽ quay lên 90 độ
   }
 
   else
   {
-    if(start-bait >= 300){
-      bait=start;
-      pwm.setPWM(5, 0, 410);
+    if ( (unsigned long) (millis() - time) > 300 )// xoay servo trong 300ms
+    {
+      time = millis();
+      pwm.setPWM(5, 0, 410); //servo quay xuống 90 độ
     }
-    //nếu đó là bóng trắng thì servo ngược lại 90 độ
+    //nếu đó là bóng trắng thì servo quay xuống 90 độ
   }
 }
