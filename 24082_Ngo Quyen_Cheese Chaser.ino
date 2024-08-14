@@ -24,8 +24,8 @@ void setup() {
   Wire.setClock(400000); // cài đặt tốc độ giao tiếp i2c ở tốc độ cao nhất(400 Mhz). Hàm này có thể bỏ qua nếu gặp lỗi hoặc không có nhu cầu tử dụng I2c tốc độ cao
   pwm.setPWM(6, 0, map(degree,0,360,0,614)); //setup chân và góc ban đầu cho servo outtake phân tử nước
   pwm.setPWM(7, 0, 307);//setup chân và góc ban đầu cho servo outtake phân tử rác
-  pwm.setPWM(5, 0, 307);//set chân và đặt góc ban đầu cho 2 servo tự động của phân loại
-  pwm.setPWM(4, 0, 307);//set chân và đặt góc ban đầu cho 2 servo tự động của phân loại
+  pwm.setPWM(5, 0, 307);//set chân và đặt góc ban đầu cho 2 servo 360 độ tự động của phân loại
+  pwm.setPWM(4, 0, 307);//set chân và đặt góc ban đầu cho 2 servo 360 độ tự động của phân loại
   initMotors();
   setupPS2controller();//set up kết nối lặp vô hạn tới khi kết nối, thư viện controlmotor.h
   pinMode(SENSOR_PIN, INPUT);
