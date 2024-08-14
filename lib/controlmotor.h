@@ -11,10 +11,10 @@
 #define PS2_SEL 15 // SS 
 #define PS2_CLK 14 // SLK
 
-#define Mleft_1  8 //motor trái
-#define Mleft_2  9
-#define Mright_1  14 //motor phải
-#define Mright_2  15
+#define Mleft_1  10 //motor trái
+#define Mleft_2  11
+#define Mright_1  12 //motor phải
+#define Mright_2  13
 
 //khac
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(ServoDriver_ADDRESS); //Khởi tạo class PWM của mạch công suất của motor siu
@@ -32,6 +32,7 @@ void setPWMMotors(int c1, int c2, int c3, int c4) //set vận tốc
   pwm.setPWM(Mleft_2, 0, c2);
   pwm.setPWM(Mright_1, 0, c3);
   pwm.setPWM(Mright_2, 0, c4);
+  //đặt giá trị cho từng động cơ tương ứng với từng biến c1,c2,c3,c4
 }
 
 void initMotors() // khai báo động cơ
@@ -53,24 +54,22 @@ void setupPS2controller() // set up kết nối lập vô hạn đến khi có k
   while (err != 0)
   {
     err = ps2x.config_gamepad(PS2_CLK, PS2_CMD, PS2_SEL, PS2_DAT, true, true);
+    //trả về 0 khi kết nối thành công
   }
 
 }
-/*
-* giữ r2 để tăng tốc
-*/
+
 bool PS2control()
 {
   int speed = Norm_speed;
   if (ps2x.Button(PSB_R2))
     speed = Max_speed;
+  //giữ r2 để tăng tốc
+  
+  int nJoyrY = ps2x.Analog(PSS_RY) - Y_JOY_CALIB; // Đọc giá trị của trục y của joy bên phải sau đó biến đổi thành 3 dạng: âm, dương hoặc 0
+  int nJoylY = ps2x.Analog(PSS_LY) - Y_JOY_CALIB; // Đọc giá trị của trục y của joy bên trái sau đó biến đổi thành 3 dạng: âm, dương hoặc 0
 
-  int nJoyrY = ps2x.Analog(PSS_RY) - Y_JOY_CALIB; // read y-joystick || driving mode đang ở sing hay two, sing thi - PSS_RY va ngược lại 
-  int nJoylY = ps2x.Analog(PSS_LY) - Y_JOY_CALIB;
-  int nMotMixL;                          // Motor (left) mixed output
-  int nMotMixR;                          // Motor (right) mixed output
-
-  if(nJoylY== 0 && nJoyrY== 0) // in case of lost connection with the wireless controller, only used in VRC2023 PS2 wireless controller 
+  if(nJoylY== 0 && nJoyrY== 0) //trong trường hợp không kết nối hoặc không có tác động vào điều khiển, động cơ đứng yên
   {
     setPWMMotors(0, 0, 0, 0);
     return 0;
@@ -83,22 +82,26 @@ bool PS2control()
     {
       c3 = nJoyrY;
       c3 = map(c3, 0, 128, 0, speed);
+      //khi joystick phải đẩy lên thì motor sẽ quay theo chiều kim đồng hồ
     }
     else if (nJoyrY < 0)
     {
       c4 = abs(nJoyrY) ; 
       c4 = map(c4, 0, 128, 0, speed);
+      //khi joystick phải đẩy lên thì motor sẽ quay theo ngược chiều kim đồng hồ
     }
 
     if (nJoylY > 0)
     {
       c1 = nJoylY;
       c1 = map(c1, 0, 128, 0, speed);
+      //khi joystick trái đẩy lên thì motor sẽ quay theo ngược chiều kim đồng hồ
     }
     else if (nJoylY < 0)
     {
       c2 = abs(nJoylY);
       c2 = map(c2, 0, 128, 0, speed);
+      //khi joystick trái đẩy lên thì motor sẽ quay theo chiều kim đồng hồ
     }
     setPWMMotors(c1, c2, c3, c4);
     return 1;
