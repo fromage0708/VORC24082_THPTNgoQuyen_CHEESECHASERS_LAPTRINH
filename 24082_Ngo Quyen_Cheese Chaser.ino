@@ -147,7 +147,7 @@ void Cam_Bien_Hong_Ngoai()
   int present = digitalRead(SENSOR_PIN);
   if (present == LOW) 
   {
-    if(start-bait >= 85){
+    if(start-bait >= 300){
       bait=start;
       pwm.setPWM(5, 0, 205);
     }
@@ -156,7 +156,7 @@ void Cam_Bien_Hong_Ngoai()
 
   else
   {
-    if(start-bait >= 285){
+    if(start-bait >= 300){
       bait=start;
       pwm.setPWM(5, 0, 410);
     }
