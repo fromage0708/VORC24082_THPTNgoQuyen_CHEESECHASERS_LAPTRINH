@@ -9,10 +9,10 @@
 
 const int SENSOR_PIN = 10;//khai báo chân cắm cảm biến hồng ngoại 
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_154MS, TCS34725_GAIN_4X);//cài đặt thông số cho color sensor TCS34725 về INTEGRATIONTIME (Thời gian tích hợp) và gain (giá trị nhận được)
-int speed=4096;//tốc độ tối đa của motor máy bắn
+int speed = 4096;//tốc độ tối đa của motor máy bắn
 bool r1 = false;//biến của nút tròn
 bool green = false;//biến của nút tam giác
-bool pink = false;//biến của nút vuông nút n lmj ??
+bool pink = false;//biến của nút vuông nút
 
 
 
@@ -29,7 +29,7 @@ void setup() {
   setupPS2controller();//dùng trong thư viện điều khiển
   pwm.setPWM(5, 0, 307);
   pwm.setPWM(4, 0, 307);//set chân và đặt góc ban đầu cho servo tự động
-  pinMode(SENSOR_PIN,INPUT);
+  pinMode(SENSOR_PIN, INPUT);
 }
 
 
@@ -38,9 +38,9 @@ void loop()
   //di chuyển
   ps2x.read_gamepad(0, 0);
   PS2control();//toàn bộ code di chuyển được đặt trong thư viện controlmotor.h
-  if (ps2x.ButtonPressed(PSB_R1)) {r1=!r1;}// chuyển ngược biến lại khi nhấn nút
-  if (ps2x.ButtonPressed(PSB_GREEN )){green=!green;}// chuyển ngược biến lại khi nhấn nút)
-  if (ps2x.ButtonPressed(PSB_PINK)){pink =! pink;}// chuyển ngược biến lại khi nhấn nút
+  if (ps2x.ButtonPressed(PSB_R1)) {r1 =! r1;}// chuyển ngược biến lại khi nhấn nút
+  if (ps2x.ButtonPressed(PSB_GREEN )) {green =! green;}// chuyển ngược biến lại khi nhấn nút)
+  if (ps2x.ButtonPressed(PSB_PINK)) {pink =! pink;}// chuyển ngược biến lại khi nhấn nút
 
   Intake();//Khởi động hàm Intake
   Color_Sensor();//Khởi động hàm Color sensor
@@ -65,14 +65,14 @@ void Outake_Bong_Trang()
   
   while(r1==true)
   {
-    int dem=millis();
+    int dem = millis();
     pwm.setPWM(6, 0, 205);
     if(dem==1000)
     {
       pwm.setPWM(6, 0, 256);
     }
 
-    if(dem==2000)
+    if(dem == 2000)
     {
       pwm.setPWM(6, 0, 205);
       dem=0;
@@ -98,7 +98,7 @@ void Outake_Bong_Den()
 
 void Intake() 
 {
-  if(pink==true)
+  if(pink == true)
   {
     pwm.setPWM(14, 0, speed);//chân số 14 set chiều dương tối đa
     pwm.setPWM(15, 0, 0);// chân số 15 set chiều âm
@@ -115,22 +115,24 @@ void Intake()
 
 void Color_Sensor() 
 {
-  int bait=0;
-  int start=millis();
+  unsigned long bait = 0;
+  unsigned long start = millis();
   uint16_t r,g,b,c;
   //những giá trị  màu color sensor xác định bao gồm red, green, blue và clean
-  tcs.getRawData(&r,&g,&b,&c);
-  if ((c>2000)&&(r>1000)) 
+  tcs.getRawData(&r, &g, &b, &c);
+  if ((c > 2000) && (r > 1000)) 
   {
-    if(start-bait>=285){
+    if(start-bait >= 300){
+      bait=start;
       pwm.setPWM(5, 0, 410);
     }
-    //nếu đó là bóng đen thì servo sẽ quay lên 180 độ
+    //nếu đó là bóng đen thì servo sẽ quay lên 90 độ
   }
   
-  else if ((c>2000)&&(r<1000)) 
+  else if ((c > 2000) && (r < 1000)) 
   {
-      if(start-bait>=285){
+      if(start-bait >= 300){
+      bait = start;
       pwm.setPWM(5, 0, 205);
     }
   }
@@ -140,18 +142,22 @@ void Color_Sensor()
 
 void Cam_Bien_Hong_Ngoai() 
 {
+  unsigned long bait = 0;
+  unsigned long start = millis();
   int present = digitalRead(SENSOR_PIN);
   if (present == LOW) 
   {
-    if(start-bait>=285){
+    if(start-bait >= 85){
+      bait=start;
       pwm.setPWM(5, 0, 205);
     }
-    //nếu đó là bóng đen thì servo sẽ quay lên 180 độ
+    //nếu đó là bóng đen thì servo sẽ quay lên 90 độ
   }
 
   else
   {
-    if(start-bait>=285){
+    if(start-bait >= 285){
+      bait=start;
       pwm.setPWM(5, 0, 410);
     }
     //nếu đó là bóng trắng thì servo ngược lại 90 độ
