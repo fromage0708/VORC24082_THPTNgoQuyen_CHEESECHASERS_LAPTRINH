@@ -7,7 +7,7 @@
 
 
 
-const int SENSOR_PIN = 10;//khai báo chân cắm cảm biến hồng ngoại 
+const int SENSOR_PIN = 25;//khai báo chân cắm cảm biến hồng ngoại 
 Adafruit_TCS34725 tcs = Adafruit_TCS34725(TCS34725_INTEGRATIONTIME_154MS, TCS34725_GAIN_4X);//cài đặt thông số cho color sensor TCS34725 về INTEGRATIONTIME (Thời gian tích hợp) và gain (giá trị nhận được)
 int speed = 4096;//tốc độ tối đa của motor máy bắn
 bool r1 = false;//biến của nút tròn
