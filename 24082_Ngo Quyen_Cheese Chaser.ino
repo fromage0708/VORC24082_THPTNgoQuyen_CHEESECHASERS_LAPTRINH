@@ -122,7 +122,7 @@ void Color_Sensor()
   tcs.getRawData(&r,&g,&b,&c);
   if ((c>2000)&&(r>1000)) 
   {
-    if(start-bait>=570){
+    if(start-bait>=285){
       pwm.setPWM(5, 0, 410);
     }
     //nếu đó là bóng đen thì servo sẽ quay lên 180 độ
@@ -143,7 +143,7 @@ void Cam_Bien_Hong_Ngoai()
   int present = digitalRead(SENSOR_PIN);
   if (present == LOW) 
   {
-    if(start-bait>=570){
+    if(start-bait>=285){
       pwm.setPWM(5, 0, 205);
     }
     //nếu đó là bóng đen thì servo sẽ quay lên 180 độ
