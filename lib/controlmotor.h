@@ -11,55 +11,43 @@
 #define PS2_SEL 15 // SS 
 #define PS2_CLK 14 // SLK
 
-
-//output
-#define pos_in 10 // intake
-#define neg_in 11
-bool status_intake = false;
-
-#define Mleft_1  8 //motor left
+#define Mleft_1  8 //motor trái
 #define Mleft_2  9
-#define Mright_1  14 //motor right
+#define Mright_1  14 //motor phải
 #define Mright_2  15
 
 //khac
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(ServoDriver_ADDRESS); //Khởi tạo class của thư viện
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(ServoDriver_ADDRESS); //Khởi tạo class PWM của mạch công suất của motor siu
 PS2X ps2x; // khởi tạo class PS2x
 
-#define Y_JOY_CALIB 128
-
+#define Y_JOY_CALIB 128 
+// giá trị của joystick khi không tác động 
 #define Max_speed 4095
 #define Norm_speed 2048
 
-#define BEBUG_CTRL
-
-// set up dong co - BEGIN
-void setPWMMotors(int c1, int c2, int c3, int c4) //set vt
+// set up động cơ- BEGIN
+void setPWMMotors(int c1, int c2, int c3, int c4) //set vận tốc 
 {
-  //char dbg_str[30];
-  //sprintf(dbg_str,"C1: %d\tC2: %d\tC3: %d\tC4: %d",c1,c2,c3,c4);
-  //Serial.println(dbg_str); // lenh check thong so
-
   pwm.setPWM(Mleft_1, 0, c1);
   pwm.setPWM(Mleft_2, 0, c2);
   pwm.setPWM(Mright_1, 0, c3);
   pwm.setPWM(Mright_2, 0, c4);
 }
 
-void initMotors() // khai bao dong co
+void initMotors() // khai báo động cơ
 {
   Wire.begin(); // SDA, SCL,400000);
   pwm.begin();
-  pwm.setOscillatorFrequency(27000000); // lien quan toi led va servo
-  pwm.setPWMFreq(50);  //  max 1k6 || kiem soat tan suat dau ra
-  Wire.setClock(400000); // high speed mode 400khz
+  pwm.setOscillatorFrequency(27000000); // cài đặt tần số dao động 
+  pwm.setPWMFreq(50);  // cài đặt tần số PWM. Tần số PWM có thể được cài đặt trong khoảng 24-1600 HZ, tần số này được cài đặt tùy thuộc vào nhu cầu xử dụng. Để điều khiển được cả servo và động cơ DC cùng nhau, tần số PWM điều khiển được cài đặt trong khoảng 50-60Hz.
+  Wire.setClock(400000); // cài đặt tốc độ giao tiếp i2c ở tốc độ cao nhất(400 Mhz). Hàm này có thể bỏ qua nếu gặp lỗi hoặc không có nhu cầu tử dụng I2c tốc độ cao
 
   setPWMMotors(0, 0, 0, 0);
 }
-// set up dong co - END
+// setup động cơ - END
 
-// set up dieu khien - BEGIN
-void setupPS2controller() // set up ket noi lap vo han den khi co the ket noi
+// set up điều khiển - BEGIN
+void setupPS2controller() // set up kết nối lập vô hạn đến khi có kết nối
 {
   int err = -1;
   while (err != 0)
@@ -69,7 +57,7 @@ void setupPS2controller() // set up ket noi lap vo han den khi co the ket noi
 
 }
 /*
-* giu r2 de tang toc
+* giữ r2 để tăng tốc
 */
 bool PS2control()
 {
