@@ -115,20 +115,26 @@ void Intake()
 
 void Color_Sensor() 
 {
+  int bait=0;
+  int start=millis();
   uint16_t r,g,b,c;
   //những giá trị  màu color sensor xác định bao gồm red, green, blue và clean
   tcs.getRawData(&r,&g,&b,&c);
   if ((c>2000)&&(r>1000)) 
   {
-    pwm.setPWM(5, 0, 307);
-    //nếu đó là bóng đen thì servo sẽ đóng lại
+    if(start-bait>=570){
+      pwm.setPWM(5, 0, 410);
+    }
+    //nếu đó là bóng đen thì servo sẽ quay lên 180 độ
   }
   
   else if ((c>2000)&&(r<1000)) 
   {
+      if(start-bait>=285){
       pwm.setPWM(5, 0, 205);
     }
-    //nếu đó là bóng trắng thì servo sẽ được mở ra
+  }
+    //nếu đó là bóng trắng thì servo ngược lại 90 độ
 }
 
 
@@ -137,13 +143,17 @@ void Cam_Bien_Hong_Ngoai()
   int present = digitalRead(SENSOR_PIN);
   if (present == LOW) 
   {
-    pwm.setPWM(4, 0, 307);
-    //nếu đó là bóng đen thì servo sẽ đóng lại 
+    if(start-bait>=570){
+      pwm.setPWM(5, 0, 205);
+    }
+    //nếu đó là bóng đen thì servo sẽ quay lên 180 độ
   }
 
   else
   {
-    pwm.setPWM(4, 0,205);
-      //nếu đó là bóng trắng thì servo sẽ được mở ra
+    if(start-bait>=285){
+      pwm.setPWM(5, 0, 410);
+    }
+    //nếu đó là bóng trắng thì servo ngược lại 90 độ
   }
 }
