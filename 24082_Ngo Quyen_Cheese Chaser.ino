@@ -17,11 +17,7 @@ int degree = 90;
 
 
 void setup() {
-  pwm.begin(); //tìm địa chỉ của PCA9685 trong mạch công suất
   tcs.begin(); //tìm địa chỉ cảm biến màu sắc
-  pwm.setOscillatorFrequency(27000000); // cài đặt tần số dao động 
-  pwm.setPWMFreq(50);// cài đặt tần số PWM. Để điều khiển được cả servo và động cơ DC cùng nhau, tần số PWM điều khiển được cài đặt trong khoảng 50-60Hz.
-  Wire.setClock(400000); // cài đặt tốc độ giao tiếp i2c ở tốc độ cao nhất(400 Mhz). Hàm này có thể bỏ qua nếu gặp lỗi hoặc không có nhu cầu tử dụng I2c tốc độ cao
   pwm.setPWM(6, 0, map(degree,0,360,0,614)); //setup chân và góc ban đầu cho servo outtake phân tử nước
   pwm.setPWM(7, 0, 307);//setup chân và góc ban đầu cho servo outtake phân tử rác
   pwm.setPWM(5, 0, 307);//set chân và đặt góc ban đầu cho 2 servo 360 độ tự động của phân loại
