@@ -2,7 +2,7 @@
 #include <Wire.h> //thư viện I2c của Arduino, do PCA9685 sử dụng chuẩn giao tiếp i2c nên thư viện này bắt buộc phải khai báo 
 #include <Adafruit_PWMServoDriver.h> // thư viện PCA9685
 #include <PS2X_lib.h> // thư viện điều 
-#include "controlmotor.h"//thư viện tự tạo để điều khiển 2 joystick di chuyển
+#include "controlmotor.h"//thư viện tự tạo để điều khiển 2 joystick di chuyển trong thư mục lib
 #include "Adafruit_TCS34725.h"
 
 
