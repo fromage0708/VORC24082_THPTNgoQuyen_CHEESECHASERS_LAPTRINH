@@ -60,6 +60,7 @@ void Outake_Bong_Trang()
     // ngưng không hoạt đông
   }//-Nếu nhấn nút circle 1 lần thì mortor sẽ quay và nếu nhấn lại lần nữa thì motor sẽ dừng
   unsigned long dem =0;
+  dem=millis();
   while(r1==true)
   {
     pwm.setPWM(6, 0, 205);
