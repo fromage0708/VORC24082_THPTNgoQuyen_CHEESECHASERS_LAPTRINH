@@ -1,4 +1,4 @@
-// code duoc kham khao tu nhieu nguon 
+// code được tham khảo từ nhiều nguồn
 #include <Wire.h> //thư viện I2c của Arduino, do PCA9685 sử dụng chuẩn giao tiếp i2c nên thư viện này bắt buộc phải khai báo 
 #include <Adafruit_PWMServoDriver.h> // thư viện PCA9685
 #include <PS2X_lib.h> // thư viện điều khiển 
@@ -16,7 +16,7 @@
 #define Mright_1  12 //motor phải
 #define Mright_2  13
 
-//khac
+//khác
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(ServoDriver_ADDRESS); //Khởi tạo class PWM của mạch công suất của motor siu
 PS2X ps2x; // khởi tạo class PS2x
 
@@ -107,4 +107,4 @@ bool PS2control()
     return 1;
 
 }
-// set up dieu khien - END
+// set up điều khiển - END
