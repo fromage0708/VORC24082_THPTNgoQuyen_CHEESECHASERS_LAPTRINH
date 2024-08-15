@@ -4,8 +4,9 @@
 #include <PS2X_lib.h> // thư viện điều khiển 
 
 
-#define ServoDriver_ADDRESS 0x70
-//Định nghĩa các chân điều khiển (i2c) 
+#define ServoDriver_ADDRESS 0x70 //địa chỉ I2C của mạch công suất
+
+//Định nghĩa các chân điều khiển (SPI) 
 #define PS2_DAT 12 // MISO 
 #define PS2_CMD 13 // MOSI 
 #define PS2_SEL 15 // SS 
