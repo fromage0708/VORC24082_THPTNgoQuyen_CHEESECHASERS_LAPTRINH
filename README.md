@@ -23,6 +23,7 @@
 
 - `PSS_RY` : điều khiển motor phải
 - `PSS_LY` : điều khiển motor trái
+- `PSB_R2` : tăng vận tốc cho xe
 - `PSB_R1` : bật tắt outtake phân tử nước
 - `PSB_GREEN` : bật tắt outtake phân tử rác 
 - `PSP_PINK` :  bật tắt intake
